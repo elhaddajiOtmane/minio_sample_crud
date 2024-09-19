@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from minio import Minio
-from minio.error import ResponseError
+from minio.error import S3Error
 
 # Load environment variables from .env file
 load_dotenv()
@@ -12,7 +12,13 @@ MINIO_ACCESS_KEY = os.getenv('MINIO_ACCESS_KEY')
 MINIO_SECRET_KEY = os.getenv('MINIO_SECRET_KEY')
 MINIO_BUCKET = os.getenv('MINIO_BUCKET')
 
-FILE_TO_UPLOAD = 'path/to/your/file.txt'  # Replace with the path to your file
+# Print out the environment variables for debugging
+print(f"MINIO_ENDPOINT: {MINIO_ENDPOINT}")
+print(f"MINIO_ACCESS_KEY: {MINIO_ACCESS_KEY}")
+print(f"MINIO_SECRET_KEY: {MINIO_SECRET_KEY}")
+print(f"MINIO_BUCKET: {MINIO_BUCKET}")
+
+FILE_TO_UPLOAD = 'file.txt'  # Replace with the path to your file
 OBJECT_NAME = 'file.txt'  # Name for the uploaded object
 
 # Create a MinIO client
@@ -32,5 +38,5 @@ try:
     # Upload the file
     client.fput_object(MINIO_BUCKET, OBJECT_NAME, FILE_TO_UPLOAD)
     print(f"File '{FILE_TO_UPLOAD}' uploaded to bucket '{MINIO_BUCKET}' as '{OBJECT_NAME}'.")
-except ResponseError as err:
+except S3Error as err:
     print(f"An error occurred: {err}")
